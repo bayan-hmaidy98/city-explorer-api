@@ -17,7 +17,7 @@ server.get('/', // our endpoint name
     )
   });
 
-try {
+
   server.get('/weather', async (req, res) => {
     const { lon, lat } = req.query;
     const queryParameters = {
@@ -31,31 +31,35 @@ try {
     const weatherDataArr = weather.data.map(item =>
      
       new Forecast(item));
-    res.send(weatherDataArr);
+    // res.send(weatherDataArr);
   });
 
   server.get('/movies', async (req, res) => {
    const searchQuery = req.query.searchQuery;
-   const page = 1
-    const queryParameters = {
-      query: {
-        searchQuery: searchQuery,
-        key: MOVIESDB_KEY,
-        page: page,
-      }
-    }
-    const movies = await axios.get(MOVIESDB_URL, queryParameters);
-    const moviesDataArr = movies.data.map(item =>
-      new BestMovies(item));
-    res.send(moviesDataArr);
- 
+
+   const movies = `${MOVIESDB_URL}?api_key=${MOVIESDB_KEY}&query=${searchQuery}&page=1]`;
+   axios.get(movies).then(response => {
+    let  moviesRes = response.data.results;
+
+      let moviesList = moviesRes.map(element => {
+        return new Movies(element);
+      });
+      res.send(moviesList);
+
+    }).catch(error=>res.send({message:error.message}));
   });
 
-}
-catch (error) {
-  res.send('Error! Please enter a valid city');
-  console.log(weatherData);
-};
+//     const moviesDataArr = movies.data.map(item =>
+//       new BestMovies(item));
+//     res.send(moviesDataArr);
+ 
+//   });
+
+// }
+// catch (error) {
+//   res.send('Error! Please enter a valid city');
+//   console.log(weatherData);
+// };
 server.listen(PORT, () => {
   console.log(`Server started on ${PORT}`);
 
