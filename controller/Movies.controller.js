@@ -1,7 +1,9 @@
 const axios = require('axios');
+const { query } = require('express');
 const MOVIESDB_KEY = process.env.MOVIESDB_KEY;
 const MOVIESDB_URL = process.env.MOVIESDB_URL;
-const Movies = require('./BestMovies')
+const Movies = require('../BestMovies')
+
 
 const getMovies = async (req, res) => {
     const searchQuery = req.query.searchQuery;
@@ -16,6 +18,10 @@ const getMovies = async (req, res) => {
         res.send(moviesList);
 
     }).catch(error => res.send({ message: error.message }));
+
+   
+
 };
+
 
 module.exports = getMovies;

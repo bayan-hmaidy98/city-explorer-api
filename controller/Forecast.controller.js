@@ -1,7 +1,7 @@
 const WEATHERBIT_KEY = process.env.WEATHERBIT_KEY;
 const WEATHERBIT_URL = process.env.WEATHERBIT_URL;
 const axios = require('axios');
-const Weather = require('./weather')
+const Weather = require('../weather')
 
 const getWeather = async (req, res) => {
     const { lon, lat } = req.query;
